@@ -9,9 +9,18 @@ import (
 )
 
 type Timer struct {
-	hour   int
-	minute int
-	second int
+	hour   time.Duration
+	minute time.Duration
+	second time.Duration
+}
+
+func show(path string) {
+	pathToVars := filepath.Join(path, "vars")
+	target := readVar(pathToVars)
+	now := int(time.Now().Unix())
+	current := target - now
+	timer := convertToTimeFormat(current)
+  printToFormat(timer)
 }
 
 func start(path string) {
@@ -21,22 +30,20 @@ func start(path string) {
 		return
 	}
 	timer := parseInput(userInput)
-	now := time.Now().Unix()
-	target := time.Now().Add(time.Duration(timer.second) * time.Second).Add(time.Duration(timer.minute) * time.Minute).Add(time.Duration(timer.hour) * time.Hour).Unix()
-	current := target - now
-  err := os.WriteFile(filepath.Join(path, "vars"), []byte(strconv.FormatInt(current, 10)), 0644)
-  if err != nil {
-    return
-  }
+	target := time.Now().Add(timer.second * time.Second).Add(timer.minute * time.Minute).Add(timer.hour * time.Hour).Unix()
+	pathToVars := filepath.Join(path, "vars")
+	err := os.WriteFile(pathToVars, []byte("duration="+strconv.FormatInt(target, 10)), 0644)
+	check(err)
 }
 
 func main() {
 	cachePath, _ := createCacheDir()
-  fmt.Println(cachePath)
 	functionCall := os.Args[1]
 	switch functionCall {
 	case "start":
 		start(cachePath)
+	case "show":
+		show(cachePath)
 	case "help":
 		fmt.Println("Don't ask me")
 	default:
