@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"bufio"
@@ -9,14 +9,13 @@ import (
 	"time"
 )
 
-func check(err error) error {
-	if err != nil {
-		return err
-	}
-	return nil
+type Timer struct {
+	Hour   time.Duration
+	Minute time.Duration
+	Second time.Duration
 }
 
-func parseInput(input string) Timer {
+func ParseInput(input string) Timer {
 	hrRe := regexp.MustCompile(`(\d+)h`)
 	mnRe := regexp.MustCompile(`(\d+)m`)
 	seRe := regexp.MustCompile(`(\d+)s`)
@@ -45,7 +44,7 @@ func parseInput(input string) Timer {
 	}
 }
 
-func convertToTimeFormat(targetDiff int) Timer {
+func ConvertToTimeFormat(targetDiff int) Timer {
 	rest := targetDiff % 3600
 	hour := targetDiff / 3600
 	minute := rest / 60
@@ -57,30 +56,32 @@ func convertToTimeFormat(targetDiff int) Timer {
 	}
 }
 
-func printToFormat(timer Timer) {
-	if timer.second < 0 || timer.minute < 0 || timer.hour < 0 {
-		if timer.hour == 0 && timer.minute == 0 {
-			fmt.Printf("🍵-%d\n", -timer.second)
-		} else if timer.hour == 0 {
-			fmt.Printf("🍵-%d:%02d\n", -timer.minute, -timer.second)
+func PrintToFormat(timer Timer) {
+	if timer.Second < 0 || timer.Minute < 0 || timer.Hour < 0 {
+		if timer.Hour == 0 && timer.Minute == 0 {
+			fmt.Printf("🍵-%d\n", -timer.Second)
+		} else if timer.Hour == 0 {
+			fmt.Printf("🍵-%d:%02d\n", -timer.Minute, -timer.Second)
 		} else {
-			fmt.Printf("🍵-%d:%02d:%02d\n", -timer.hour, -timer.minute, -timer.second)
+			fmt.Printf("🍵-%d:%02d:%02d\n", -timer.Hour, -timer.Minute, -timer.Second)
 		}
 	} else {
-		if timer.hour == 0 && timer.minute == 0 {
-			fmt.Printf("🍵-%d\n", -timer.second)
-		} else if timer.hour == 0 {
-			fmt.Printf("🍵-%d:%02d\n", -timer.minute, -timer.second)
+		if timer.Hour == 0 && timer.Minute == 0 {
+			fmt.Printf("🍵%d\n", timer.Second)
+		} else if timer.Hour == 0 {
+			fmt.Printf("🍵%d:%02d\n", timer.Minute, timer.Second)
 		} else {
-			fmt.Printf("🍵%d:%02d:%02d\n", timer.hour, timer.minute, timer.second)
+			fmt.Printf("🍵%d:%02d:%02d\n", timer.Hour, timer.Minute, timer.Second)
 		}
 
 	}
 }
 
-func readVar(path string) int {
+func ReadVar(path string) int {
 	file, err := os.Open(path)
-	check(err)
+	if err != nil {
+		return 0
+	}
 	scanner := bufio.NewScanner(file)
 	var value int
 	for scanner.Scan() {

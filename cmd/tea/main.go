@@ -6,39 +6,42 @@ import (
 	"path/filepath"
 	"strconv"
 	"time"
-)
 
-type Timer struct {
-	hour   time.Duration
-	minute time.Duration
-	second time.Duration
-}
+	i "github.com/ricardoraposo/tea/internal"
+)
 
 func show(path string) {
 	pathToVars := filepath.Join(path, "vars")
-	target := readVar(pathToVars)
+	target := i.ReadVar(pathToVars)
 	now := int(time.Now().Unix())
 	current := target - now
-	timer := convertToTimeFormat(current)
-  printToFormat(timer)
+	timer := i.ConvertToTimeFormat(current)
+	i.PrintToFormat(timer)
 }
 
 func start(path string) {
-	userInput := os.Args[2]
-	if len(userInput) < 2 {
+	if len(os.Args) < 2 {
 		fmt.Println("Please pass a parameter brother")
 		return
 	}
-	timer := parseInput(userInput)
-	target := time.Now().Add(timer.second * time.Second).Add(timer.minute * time.Minute).Add(timer.hour * time.Hour).Unix()
+	userInput := os.Args[2]
+	timer := i.ParseInput(userInput)
+	target := time.Now().Add(timer.Second * time.Second).Add(timer.Minute * time.Minute).Add(timer.Hour * time.Hour).Unix()
 	pathToVars := filepath.Join(path, "vars")
 	err := os.WriteFile(pathToVars, []byte("duration="+strconv.FormatInt(target, 10)), 0644)
-	check(err)
+	if err != nil {
+		return
+	}
 }
 
 func main() {
-	cachePath, _ := createCacheDir()
-	functionCall := os.Args[1]
+	cachePath, _ := i.CreateCacheDir()
+  var functionCall string
+	if len(os.Args) < 2 {
+    functionCall = ""
+	} else {
+    functionCall = os.Args[1]
+  }
 	switch functionCall {
 	case "start":
 		start(cachePath)

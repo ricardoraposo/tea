@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"os"
@@ -37,7 +37,7 @@ func getCacheDir() (string, error) {
 	return cacheDir, err
 }
 
-func createCacheDir() (string, error) {
+func CreateCacheDir() (string, error) {
 	cacheDir, err := getCacheDir()
 	if err != nil {
 		return "", err
