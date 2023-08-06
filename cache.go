@@ -37,15 +37,15 @@ func getCacheDir() (string, error) {
 	return cacheDir, err
 }
 
-func createCacheDir() error {
+func createCacheDir() (string, error) {
 	cacheDir, err := getCacheDir()
 	if err != nil {
-		return err
+		return "", err
 	}
 	folderPath := filepath.Join(cacheDir, "tea")
 	err = os.Mkdir(folderPath, 0755)
 	if err != nil {
-		return err
+		return folderPath, err
 	}
-	return nil
+	return folderPath, nil
 }

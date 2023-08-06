@@ -29,3 +29,11 @@ func parseInput(input string) Timer {
 	}
 	return Timer{hour, minute, second}
 }
+
+func convertToTimeFormat(targetDiff int) Timer {
+	rest := targetDiff % 3600
+	hour := targetDiff / 3600
+	minute := rest / 60
+	second := rest % 60
+	return Timer{hour, minute, second}
+}
