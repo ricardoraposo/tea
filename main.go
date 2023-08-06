@@ -40,7 +40,7 @@ func main() {
 	case "start":
 		start()
 	case "help":
-		fmt.Println("Nigga don't ask me.")
+		fmt.Println("Don't ask me")
 	default:
 		fmt.Println("Invalid parameter, type 'koo help' for assistance")
 	}
