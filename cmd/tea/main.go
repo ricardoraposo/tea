@@ -13,6 +13,10 @@ import (
 func show(path string) {
 	pathToVars := filepath.Join(path, "vars")
 	target := h.ReadVar(pathToVars)
+  if target == 0 {
+    fmt.Println("")
+    return
+  }
 	now := int(time.Now().Unix())
 	current := target - now
 	timer := h.ConvertToTimeFormat(current)
@@ -35,6 +39,14 @@ func start(path string) {
 	}
 }
 
+func stop(path string) {
+	pathToVars := filepath.Join(path, "vars")
+	err := os.WriteFile(pathToVars, []byte(""), 0644)
+  if err != nil {
+    return
+  }
+}
+
 func main() {
 	cachePath, _ := h.CreateCacheDir()
 	var functionCall string
@@ -46,6 +58,8 @@ func main() {
 	switch functionCall {
 	case "start":
 		start(cachePath)
+	case "stop":
+		stop(cachePath)
 	case "show":
 		show(cachePath)
 	case "help":
