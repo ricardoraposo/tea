@@ -7,16 +7,16 @@ import (
 	"strconv"
 	"time"
 
-	i "github.com/ricardoraposo/tea/internal"
+	h "github.com/ricardoraposo/tea/helpers"
 )
 
 func show(path string) {
 	pathToVars := filepath.Join(path, "vars")
-	target := i.ReadVar(pathToVars)
+	target := h.ReadVar(pathToVars)
 	now := int(time.Now().Unix())
 	current := target - now
-	timer := i.ConvertToTimeFormat(current)
-	i.PrintToFormat(timer)
+	timer := h.ConvertToTimeFormat(current)
+	h.PrintToFormat(timer)
 }
 
 func start(path string) {
@@ -25,7 +25,7 @@ func start(path string) {
 		return
 	}
 	userInput := os.Args[2]
-	timer := i.ParseInput(userInput)
+	timer := h.ParseInput(userInput)
 	target := time.Now().Add(timer.Second * time.Second).Add(timer.Minute * time.Minute).Add(timer.Hour * time.Hour).Unix()
 	pathToVars := filepath.Join(path, "vars")
 	err := os.WriteFile(pathToVars, []byte("duration="+strconv.FormatInt(target, 10)), 0644)
@@ -35,14 +35,13 @@ func start(path string) {
 }
 
 func main() {
-	cachePath, _ := i.CreateCacheDir()
+	cachePath, _ := h.CreateCacheDir()
   var functionCall string
 	if len(os.Args) < 2 {
     functionCall = ""
 	} else {
     functionCall = os.Args[1]
   }
-
 	switch functionCall {
 	case "start":
 		start(cachePath)
@@ -51,6 +50,6 @@ func main() {
 	case "help":
 		fmt.Println("Don't ask me")
 	default:
-		fmt.Println("Invalid parameter, type 'tea help' for assistance")
+		show(cachePath)
 	}
 }

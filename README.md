@@ -1,3 +1,3 @@
 # TEA
 
-This is a cli timer in go
+This is a cli timer written in go
