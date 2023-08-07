@@ -20,11 +20,12 @@ func show(path string) {
 }
 
 func start(path string) {
-	if len(os.Args) < 2 {
-		fmt.Println("Please pass a parameter brother")
-		return
+	var userInput string
+	if len(os.Args) < 3 {
+		userInput = "30m42s"
+	} else {
+		userInput = os.Args[2]
 	}
-	userInput := os.Args[2]
 	timer := h.ParseInput(userInput)
 	target := time.Now().Add(timer.Second * time.Second).Add(timer.Minute * time.Minute).Add(timer.Hour * time.Hour).Unix()
 	pathToVars := filepath.Join(path, "vars")
@@ -36,12 +37,12 @@ func start(path string) {
 
 func main() {
 	cachePath, _ := h.CreateCacheDir()
-  var functionCall string
+	var functionCall string
 	if len(os.Args) < 2 {
-    functionCall = ""
+		functionCall = ""
 	} else {
-    functionCall = os.Args[1]
-  }
+		functionCall = os.Args[1]
+	}
 	switch functionCall {
 	case "start":
 		start(cachePath)

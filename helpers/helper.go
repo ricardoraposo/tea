@@ -57,21 +57,26 @@ func ConvertToTimeFormat(targetDiff int) Timer {
 }
 
 func PrintToFormat(timer Timer) {
+	emoji := "🍵"
+	warnEmoji := "🧨"
+	if timer.Minute < 3 && timer.Second%2 == 0 {
+		emoji = warnEmoji
+	}
 	if timer.Second < 0 || timer.Minute < 0 || timer.Hour < 0 {
 		if timer.Hour == 0 && timer.Minute == 0 {
-			fmt.Printf("🍵-%d\n", -timer.Second)
+			fmt.Printf("%s-%d\n", emoji, -timer.Second)
 		} else if timer.Hour == 0 {
-			fmt.Printf("🍵-%d:%02d\n", -timer.Minute, -timer.Second)
+			fmt.Printf("%s-%d:%02d\n", emoji, -timer.Minute, -timer.Second)
 		} else {
-			fmt.Printf("🍵-%d:%02d:%02d\n", -timer.Hour, -timer.Minute, -timer.Second)
+			fmt.Printf("%s-%d:%02d:%02d\n", emoji, -timer.Hour, -timer.Minute, -timer.Second)
 		}
 	} else {
 		if timer.Hour == 0 && timer.Minute == 0 {
-			fmt.Printf("🍵%d\n", timer.Second)
+			fmt.Printf("%s%d\n", emoji, timer.Second)
 		} else if timer.Hour == 0 {
-			fmt.Printf("🍵%d:%02d\n", timer.Minute, timer.Second)
+			fmt.Printf("%s%d:%02d\n", emoji, timer.Minute, timer.Second)
 		} else {
-			fmt.Printf("🍵%d:%02d:%02d\n", timer.Hour, timer.Minute, timer.Second)
+			fmt.Printf("%s%d:%02d:%02d\n", emoji, timer.Hour, timer.Minute, timer.Second)
 		}
 
 	}
