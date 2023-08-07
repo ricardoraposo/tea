@@ -42,6 +42,7 @@ func main() {
 	} else {
     functionCall = os.Args[1]
   }
+
 	switch functionCall {
 	case "start":
 		start(cachePath)
