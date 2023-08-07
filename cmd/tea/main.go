@@ -13,10 +13,10 @@ import (
 func show(path string) {
 	pathToVars := filepath.Join(path, "vars")
 	target := h.ReadVar(pathToVars)
-  if target == 0 {
-    fmt.Println("")
-    return
-  }
+	if target == 0 {
+		fmt.Println("")
+		return
+	}
 	now := int(time.Now().Unix())
 	current := target - now
 	timer := h.ConvertToTimeFormat(current)
@@ -31,7 +31,7 @@ func start(path string) {
 		userInput = os.Args[2]
 	}
 	timer := h.ParseInput(userInput)
-	target := time.Now().Add(timer.Second * time.Second).Add(timer.Minute * time.Minute).Add(timer.Hour * time.Hour).Unix()
+	target := time.Now().Add(timer.Second*time.Second).Add(timer.Minute*time.Minute).Add(timer.Hour*time.Hour).Unix() - 1
 	pathToVars := filepath.Join(path, "vars")
 	err := os.WriteFile(pathToVars, []byte("duration="+strconv.FormatInt(target, 10)), 0644)
 	if err != nil {
@@ -42,9 +42,9 @@ func start(path string) {
 func stop(path string) {
 	pathToVars := filepath.Join(path, "vars")
 	err := os.WriteFile(pathToVars, []byte(""), 0644)
-  if err != nil {
-    return
-  }
+	if err != nil {
+		return
+	}
 }
 
 func main() {
